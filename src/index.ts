@@ -5,6 +5,7 @@ import { initExample } from './example'
 dotenv.config()
 
 const app: Express = express()
+app.use(express.json())
 const port = process.env.PORT || 3000
 
 const createServer = async () => {
