@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getUser, updateUser, changePassword } from '../services/userService'
+import { getUser, updateUser, changePassword } from './user.service'
 
 interface UserRequest extends Request {
   user?: {

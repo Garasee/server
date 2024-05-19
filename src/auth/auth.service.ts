@@ -1,18 +1,23 @@
-import bcrypt from 'bcrypt'
-import { encryptToken } from '../utils/aesUtils'
+import { PrismaClient } from '@prisma/client'
+import { comparePassword, encryptToken } from '../utils/cryptoUtils'
+
+const prisma = new PrismaClient()
 
 const login = async (email: string, password: string) => {
   try {
-    // Mocked user data. Replace this with actual database query.
-    const user = {
-      id: 1,
-      email: 'example@example.com',
-      hashedPassword:
-        '$2b$10$0vL1ZkHvh.Ktw9tKnh/Jh.aS8b3DSTt7HZT1dMe.4a4kfw.vpn7tG', // Hashed password
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    if (!user) {
+      return {
+        isSuccess: false,
+        statusCode: 401,
+        message: 'Incorrect email or password',
+      }
     }
 
-    // Compare hashed password with input password
-    const match = await bcrypt.compare(password, user.hashedPassword)
+    const match = await comparePassword(password, user.password)
     if (!match) {
       return {
         isSuccess: false,
@@ -21,7 +26,6 @@ const login = async (email: string, password: string) => {
       }
     }
 
-    // Generate and encrypt token
     const token = encryptToken({ userId: user.id })
 
     return {
