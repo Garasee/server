@@ -1,17 +1,27 @@
-import express from 'express'
+import express, { Express } from 'express'
+import dotenv from 'dotenv'
 import authRoutes from './auth'
 import userRoutes from './users'
-import exampleRoutes from './example'
+
 import { authMiddleware } from './commons/token.middleware'
 
-const app = express()
-const PORT = process.env.PORT || 3000
+import { initExample } from './example'
 
+dotenv.config()
+
+const app: Express = express()
 app.use(express.json())
-app.use('/auth', authRoutes)
-app.use('/users', authMiddleware, userRoutes)
-app.use('/example', exampleRoutes)
 
-app.listen(PORT, () => {
-  console.log(`[server]: Server is running at http://localhost:${PORT}`)
-})
+const port = process.env.PORT || 3000
+
+const createServer = async () => {
+  initExample(app)
+  app.use('/auth', authRoutes)
+  app.use('/users', authMiddleware, userRoutes)
+
+  app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`)
+  })
+}
+
+createServer()

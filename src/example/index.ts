@@ -1,8 +1,6 @@
-import { Router } from 'express'
+import { Express } from 'express'
 import { getHelloWorld } from './example.controller'
 
-const router = Router()
-
-router.get('/', getHelloWorld)
-
-export default router
+export const initExample = (app: Express) => {
+  app.get('/', getHelloWorld)
+}
