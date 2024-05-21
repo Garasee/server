@@ -1,5 +1,11 @@
 import { Request, Response } from 'express'
-import { getUser, updateUser, changePassword } from './user.service'
+import {
+  getUser,
+  updateUser,
+  changePassword,
+  forgotPassword,
+  resetPassword,
+} from './user.service'
 
 interface UserRequest extends Request {
   user?: {
@@ -42,4 +48,26 @@ export const changePasswordController = async (
     confirmationPassword
   )
   res.status(result.statusCode).json(result)
+}
+
+export const forgotPasswordController = async (req: Request, res: Response) => {
+  const { email } = req.body
+
+  try {
+    const result = await forgotPassword(email)
+    res.status(result.statusCode).json(result)
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+export const resetPasswordController = async (req: Request, res: Response) => {
+  const { token, password, confirmationPassword } = req.body
+
+  try {
+    const result = await resetPassword(token, password, confirmationPassword)
+    res.status(result.statusCode).json(result)
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' })
+  }
 }

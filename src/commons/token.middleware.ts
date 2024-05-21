@@ -14,6 +14,7 @@ export const authMiddleware = async (
   next: NextFunction
 ) => {
   const token = req.headers.authorization?.split(' ')[1]
+  console.log('Received token:', token)
   if (!token) {
     return res.status(401).json({
       isSuccess: false,
@@ -25,28 +26,36 @@ export const authMiddleware = async (
 
   try {
     const decryptedToken = decryptToken(token)
+    console.log('Decrypted token:', decryptedToken)
     const userIdFromToken = decryptedToken.userId
 
     const session = await prisma.session.findUnique({
       where: { token },
     })
+    console.log('Session from DB:', session)
 
     if (!session) {
       return res.status(401).json({
         isSuccess: false,
         statusCode: 401,
-        message: 'Unauthorized',
+        message: 'Unauthorized: Session not found',
         content: null,
       })
     }
 
     const userIdFromSession = session.userId
+    console.log(
+      'UserId from Token:',
+      userIdFromToken,
+      'UserId from Session:',
+      userIdFromSession
+    )
 
     if (userIdFromToken !== userIdFromSession) {
       return res.status(401).json({
         isSuccess: false,
         statusCode: 401,
-        message: 'Unauthorized',
+        message: 'Unauthorized: User ID mismatch',
         content: null,
       })
     }

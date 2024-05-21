@@ -14,19 +14,19 @@ datasource db {
 }
 
 model User {
-  id         String       @id @default(uuid())
-  name       String
-  email      String       @unique
-  password   String
-  phone      String?      
-  province   String?      
-  city       String?      
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Session    Session[]
-  Evaluation Evaluation[]
+  id              String          @id @default(uuid())
+  name            String
+  email           String          @unique
+  password        String
+  phone           String?
+  province        String?
+  city            String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  sessions        Session[]
+  evaluations     Evaluation[]
+  passwordResets  PasswordReset[] // Link to PasswordReset model
 }
-
 
 model Session {
   id        String   @id @default(uuid())
@@ -45,6 +45,16 @@ model Evaluation {
   isGood    Boolean  @default(true)
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  token     String   @unique
+  expiredAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
