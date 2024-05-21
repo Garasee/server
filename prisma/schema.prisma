@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,17 +19,17 @@ model User {
   updatedAt       DateTime        @updatedAt
   sessions        Session[]
   evaluations     Evaluation[]
-  passwordResets  PasswordReset[] // Link to PasswordReset model
 }
 
 model Session {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.VarChar(255)
+  id        String      @id @default(uuid())
+  token     String      @unique
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String      @db.VarChar(255)
   expiredAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  type      SessionType @default(NORMAL)
 }
 
 model Evaluation {
@@ -49,12 +43,7 @@ model Evaluation {
   updatedAt DateTime @updatedAt
 }
 
-model PasswordReset {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  token     String   @unique
-  expiredAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum SessionType {
+  NORMAL
+  PASSWORD_RESET
 }

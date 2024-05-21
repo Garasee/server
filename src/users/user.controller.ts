@@ -41,6 +41,13 @@ export const changePasswordController = async (
     return res.status(400).json({ message: 'User ID not found' })
   }
   const { oldPassword, password, confirmationPassword } = req.body
+  if (password !== confirmationPassword) {
+    return res.status(400).json({
+      isSuccess: false,
+      statusCode: 400,
+      message: 'Passwords do not match',
+    })
+  }
   const result = await changePassword(
     userId,
     oldPassword,
@@ -63,11 +70,13 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
 
 export const resetPasswordController = async (req: Request, res: Response) => {
   const { token, password, confirmationPassword } = req.body
-
-  try {
-    const result = await resetPassword(token, password, confirmationPassword)
-    res.status(result.statusCode).json(result)
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error' })
+  if (password !== confirmationPassword) {
+    return res.status(400).json({
+      isSuccess: false,
+      statusCode: 400,
+      message: 'Passwords do not match',
+    })
   }
+  const result = await resetPassword(token, password)
+  res.status(result.statusCode).json(result)
 }
