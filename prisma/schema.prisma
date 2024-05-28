@@ -44,6 +44,6 @@ model Evaluation {
 }
 
 enum SessionType {
-  NORMAL
+  AUTHENTICATION
   PASSWORD_RESET
 }
