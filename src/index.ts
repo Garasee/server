@@ -1,24 +1,24 @@
-import express, { Express } from 'express';
-import dotenv from 'dotenv';
-import { initAuthRoutes } from './auth';
-import { initUserRoutes } from './users';
-import { initExample } from './example';
+import express, { Express } from 'express'
+import dotenv from 'dotenv'
+import { initAuthRoutes } from './auth'
+import { initUserRoutes } from './users'
+import { initExample } from './example'
 
-dotenv.config();
+dotenv.config()
 
-const app: Express = express();
-app.use(express.json());
+const app: Express = express()
+app.use(express.json())
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000
 
 const createServer = async () => {
-  initExample(app);
-  initAuthRoutes(app);
-  initUserRoutes(app);
+  initExample(app)
+  initAuthRoutes(app)
+  initUserRoutes(app)
 
   app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-  });
-};
+    console.log(`[server]: Server is running at http://localhost:${port}`)
+  })
+}
 
-createServer();
+createServer()

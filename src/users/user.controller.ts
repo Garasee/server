@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import {
+  forgotPassword,
+  resetPassword,
   getUser,
   updateUser,
   changePassword,
-  forgotPassword,
-  resetPassword,
 } from './user.service'
 
 interface UserRequest extends Request {
@@ -59,17 +59,28 @@ export const changePasswordController = async (
 
 export const forgotPasswordController = async (req: Request, res: Response) => {
   const { email } = req.body
-
   try {
     const result = await forgotPassword(email)
     res.status(result.statusCode).json(result)
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' })
+    res.status(500).json({
+      isSuccess: false,
+      statusCode: 500,
+      message: 'Internal Server Error',
+    })
   }
 }
 
 export const resetPasswordController = async (req: Request, res: Response) => {
-  const { token, password, confirmationPassword } = req.body
+  const { password, confirmationPassword } = req.body
+  const token = req.headers['x-reset-token'] as string
+  if (!token) {
+    return res.status(400).json({
+      isSuccess: false,
+      statusCode: 400,
+      message: 'Invalid or missing reset token',
+    })
+  }
   if (password !== confirmationPassword) {
     return res.status(400).json({
       isSuccess: false,
@@ -77,6 +88,14 @@ export const resetPasswordController = async (req: Request, res: Response) => {
       message: 'Passwords do not match',
     })
   }
-  const result = await resetPassword(token, password)
-  res.status(result.statusCode).json(result)
+  try {
+    const result = await resetPassword(token, password)
+    res.status(result.statusCode).json(result)
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      statusCode: 500,
+      message: 'Internal Server Error',
+    })
+  }
 }
