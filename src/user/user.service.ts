@@ -8,7 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { PrismaService } from '../prisma/prisma.service'
 
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
-import crypto, { randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
 import { SessionType } from '@prisma/client'
 import { isAfter } from 'date-fns'
 import { compare, hash } from 'bcrypt'

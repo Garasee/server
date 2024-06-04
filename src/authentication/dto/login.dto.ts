@@ -1,12 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types'
-import { RegistrationDto } from './registration.dto'
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsString,
-  MinLength,
-} from 'class-validator'
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
 
 export class LoginDto {
   @IsNotEmpty()
