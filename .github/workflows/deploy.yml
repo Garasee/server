@@ -36,6 +36,6 @@ jobs:
           gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.CLOUD_RUN_SERVICE }} \
             --platform managed \
-            --region us-central1 \
+            --region asia-southeast2 \
             --allow-unauthenticated \
             --set-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }},APP_WHITELIST=${{ secrets.APP_WHITELIST }},APP_PORT=${{ secrets.APP_PORT }},ENCRYPTION_SALT_ROUNDS=${{ secrets.ENCRYPTION_SALT_ROUNDS }},ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }},ENCRYPTION_ALGORITHM=${{ secrets.ENCRYPTION_ALGORITHM }},REDIS_TTL=${{ secrets.REDIS_TTL }},REDIS_LIMIT=${{ secrets.REDIS_LIMIT }},REDIS_URL=${{ secrets.REDIS_URL }}
