@@ -1,3 +1,15 @@
 node_modules
+dist
+tsconfig.json
+tsconfig-build.json
+.eslintrc.js
+.vscode/*
+.idea/
 yarn.lock
-.idea
+prisma
+.prettierrc
+nest-cli.json
+package.json
+README.md
+test
+tsconfig.build.json

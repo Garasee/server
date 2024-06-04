@@ -7,26 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model City {
+  id        String   @id @default(uuid())
+  name      String
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model User {
-  id              String          @id @default(uuid())
-  name            String
-  email           String          @unique
-  password        String
-  phone           String?
-  province        String?
-  city            String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  sessions        Session[]
-  evaluations     Evaluation[]
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  password    String
+  phone       String?
+  cityId      String
+  city        City         @relation(fields: [cityId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  sessions    Session[]
+  evaluations Evaluation[]
 }
 
 model Session {
   id        String      @id @default(uuid())
   token     String      @unique
   user      User        @relation(fields: [userId], references: [id])
-  userId    String      @db.VarChar(255)
+  userId    String
   expiredAt DateTime
+  isExpired Boolean     @default(false)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   type      SessionType @default(AUTHENTICATION)
@@ -38,7 +47,7 @@ model Evaluation {
   price     Decimal  @default(0.0)
   isGood    Boolean  @default(true)
   user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.VarChar(255)
+  userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
