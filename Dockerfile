@@ -22,6 +22,8 @@ ENV DATABASE_URL=$DATABASE_URL
 
 RUN yarn prisma migrate deploy
 
+RUN yarn prisma generate
+
 RUN yarn test-all
 
 RUN yarn build
