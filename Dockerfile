@@ -20,7 +20,7 @@ ARG DATABASE_URL
 
 ENV DATABASE_URL=$DATABASE_URL
 
-RUN yarn migrate
+RUN yarn prisma migrate deploy
 
 RUN yarn test-all
 
