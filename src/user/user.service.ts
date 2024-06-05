@@ -63,7 +63,7 @@ export class UserService {
     }
 
     const resetToken = randomBytes(32).toString('hex')
-    const resetTokenExpiry = new Date(Date.now() + 3600000) // 1 hour expiry
+    const resetTokenExpiry = new Date(Date.now() + 3600000) 
 
     await this.prisma.session.create({
       data: {

@@ -21,7 +21,7 @@ import { IsPublic } from '../commons/decorators/isPublic.decorator'
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
 import { ResetPasswordDto } from './dto/reset-password.dto'
 
-@Controller('user') // Make sure the controller route is correct
+@Controller('user') 
 export class UserController {
   constructor(
     private readonly userService: UserService,
