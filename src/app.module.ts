@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
-import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis'
-import { APP_FILTER, APP_GUARD } from '@nestjs/core'
-
 import { AppController } from './app.controller'
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis'
+import { ConfigModule } from '@nestjs/config'
+import { APP_FILTER, APP_GUARD } from '@nestjs/core'
+import { HttpExceptionFilter } from './commons/filters/http-exception.filter'
 import { AuthenticationModule } from './authentication/authentication.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { CommonModule } from './commons/common.module'
 import { UserModule } from './user/user.module'
-
-import { HttpExceptionFilter } from './commons/filters/http-exception.filter'
 import { AuthGuard } from './authentication/auth.guard'
+import { CityModule } from './city/city.module'
 
 @Module({
   imports: [
@@ -29,6 +28,7 @@ import { AuthGuard } from './authentication/auth.guard'
     CommonModule,
     AuthenticationModule,
     UserModule,
+    CityModule,
   ],
   controllers: [AppController],
   providers: [

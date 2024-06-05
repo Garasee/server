@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common'
-import { CityService } from '../../services/city.service'
-import { ResponseUtil } from '../utilities/response.util'
-import { IsPublic } from '../decorators/isPublic.decorator'
+import { CityService } from './city.service'
+import { ResponseUtil } from '../commons/utilities/response.util'
+import { IsPublic } from '../commons/decorators/isPublic.decorator'
 
 @Controller('common')
 export class CityController {
