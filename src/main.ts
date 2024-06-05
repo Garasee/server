@@ -3,7 +3,11 @@ import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
-  const whitelistUrls: any[] = process.env.APP_WHITELIST.split(',')
+  const whitelist = process.env.APP_WHITELIST
+  if (!whitelist) {
+    throw new Error('APP_WHITELIST is not defined in the environment variables')
+  }
+  const whitelistUrls: any[] = whitelist.split(',')
 
   const corsOptions = {
     credentials: true,

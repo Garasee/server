@@ -6,6 +6,11 @@ export class CityService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getCities() {
-    return this.prisma.city.findMany()
+    return this.prisma.city.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    })
   }
 }
