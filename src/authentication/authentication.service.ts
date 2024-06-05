@@ -1,13 +1,12 @@
 import {
-  ConflictException,
   Injectable,
+  ConflictException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common'
 import { RegistrationDto } from './dto/registration.dto'
 import { LoginDto } from './dto/login.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
-
 import { compare, hash } from 'bcrypt'
 import { CipherUtil } from '../commons/utilities/cipher.util'
 

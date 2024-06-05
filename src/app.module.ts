@@ -7,9 +7,10 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core'
 import { HttpExceptionFilter } from './commons/filters/http-exception.filter'
 import { AuthenticationModule } from './authentication/authentication.module'
 import { PrismaModule } from './prisma/prisma.module'
-import { CommonModule } from './commons/common.module'
 import { UserModule } from './user/user.module'
+import { CommonModule } from './commons/common.module'
 import { AuthGuard } from './authentication/auth.guard'
+import { CityModule } from './city/city.module'
 
 @Module({
   imports: [
@@ -24,9 +25,10 @@ import { AuthGuard } from './authentication/auth.guard'
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
-    CommonModule,
     AuthenticationModule,
     UserModule,
+    CommonModule,
+    CityModule,
   ],
   controllers: [AppController],
   providers: [
