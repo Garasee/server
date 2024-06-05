@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from './commons/filters/http-exception.filter'
 import { AuthenticationModule } from './authentication/authentication.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { UserModule } from './user/user.module'
+import { CommonModule } from './commons/common.module'
 import { AuthGuard } from './authentication/auth.guard'
 import { CityModule } from './city/city.module'
 
@@ -26,6 +27,7 @@ import { CityModule } from './city/city.module'
     PrismaModule,
     AuthenticationModule,
     UserModule,
+    CommonModule,
     CityModule,
   ],
   controllers: [AppController],
