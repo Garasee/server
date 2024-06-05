@@ -3,14 +3,14 @@ import { CityService } from './city.service'
 import { ResponseUtil } from '../commons/utilities/response.util'
 import { IsPublic } from '../commons/decorators/isPublic.decorator'
 
-@Controller('common')
+@Controller('cities')
 export class CityController {
   constructor(
     private readonly cityService: CityService,
     private readonly responseUtil: ResponseUtil
   ) {}
 
-  @Get('city')
+  @Get()
   @IsPublic()
   async getCities() {
     const cities = await this.cityService.getCities()
