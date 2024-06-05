@@ -1,17 +1,16 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common'
+import { PrismaService } from '../prisma/prisma.service'
 import { ChangePasswordDto } from './dto/change-password.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { PrismaService } from '../prisma/prisma.service'
-
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
+import { compare, hash } from 'bcrypt'
 import { randomBytes } from 'crypto'
 import { SessionType } from '@prisma/client'
 import { isAfter } from 'date-fns'
-import { compare, hash } from 'bcrypt'
 
 @Injectable()
 export class UserService {
@@ -54,7 +53,6 @@ export class UserService {
     })
   }
 
-  // TODO: Send email via pub/sub
   async forgotPassword({ email }: ForgotPasswordDto) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -105,6 +103,26 @@ export class UserService {
         where: { token },
         data: { isExpired: true },
       })
+    })
+  }
+
+  async verifyEmail(verifyToken: string) {
+    const session = await this.prisma.session.findUnique({
+      where: { token: verifyToken },
+    })
+
+    if (!session || session.isExpired) {
+      throw new NotFoundException('Invalid or expired verification token')
+    }
+
+    await this.prisma.user.update({
+      where: { id: session.userId },
+      data: { isEmailVerified: true },
+    })
+
+    await this.prisma.session.update({
+      where: { token: verifyToken },
+      data: { isExpired: true },
     })
   }
 }

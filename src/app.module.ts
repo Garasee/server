@@ -9,8 +9,8 @@ import { AuthenticationModule } from './authentication/authentication.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { UserModule } from './user/user.module'
 import { CommonModule } from './commons/common.module'
-import { AuthGuard } from './authentication/auth.guard'
 import { CityModule } from './city/city.module'
+import { AuthGuard } from './authentication/auth.guard'
 
 @Module({
   imports: [

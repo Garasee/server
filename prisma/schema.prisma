@@ -16,18 +16,21 @@ model City {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  name        String
-  email       String       @unique
-  password    String
-  phone       String?
-  cityId      String
-  city        City         @relation(fields: [cityId], references: [id])
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  sessions    Session[]
-  evaluations Evaluation[]
+  id              String       @id @default(uuid())
+  name            String
+  email           String       @unique
+  password        String
+  phone           String?
+  cityId          String
+  city            City         @relation(fields: [cityId], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  sessions        Session[]
+  evaluations     Evaluation[]
+  isEmailVerified Boolean      @default(false)
 }
+
+
 
 model Session {
   id        String      @id @default(uuid())

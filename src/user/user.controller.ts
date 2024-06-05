@@ -7,6 +7,8 @@ import {
   Put,
   BadRequestException,
   Req,
+  Headers,
+  HttpStatus,
 } from '@nestjs/common'
 import { Request } from 'express'
 import { UserService } from './user.service'
@@ -19,7 +21,7 @@ import { IsPublic } from '../commons/decorators/isPublic.decorator'
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
 import { ResetPasswordDto } from './dto/reset-password.dto'
 
-@Controller('users')
+@Controller('user') // Make sure the controller route is correct
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -35,6 +37,7 @@ export class UserController {
       },
     })
   }
+
   @Put()
   async updateUser(
     @GetCurrentUser() user: CompleteUserInterface,
@@ -94,6 +97,22 @@ export class UserController {
     await this.userService.resetPassword(token, password)
     return this.responseUtil.response({
       message: 'Password successfully reset!',
+    })
+  }
+
+  @IsPublic()
+  @Post('verify-email')
+  async verifyEmail(@Headers('X-VERIFY-TOKEN') verifyToken: string) {
+    if (!verifyToken) {
+      throw new BadRequestException('Verification token is missing')
+    }
+
+    await this.userService.verifyEmail(verifyToken)
+
+    return this.responseUtil.response({
+      message: 'Email verified successfully',
+      code: HttpStatus.OK,
+      content: null,
     })
   }
 }
