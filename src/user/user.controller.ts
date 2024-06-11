@@ -7,6 +7,9 @@ import {
   Put,
   BadRequestException,
   Req,
+  Headers,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common'
 import { Request } from 'express'
 import { UserService } from './user.service'
@@ -18,6 +21,8 @@ import { ResponseUtil } from '../commons/utilities/response.util'
 import { IsPublic } from '../commons/decorators/isPublic.decorator'
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
 import { ResetPasswordDto } from './dto/reset-password.dto'
+import { RequestOtpDto } from './dto/request-otp.dto'
+import { VerifyOtpDto } from './dto/verify-otp.dto'
 
 @Controller('users')
 export class UserController {
@@ -75,14 +80,68 @@ export class UserController {
   }
 
   @IsPublic()
-  @Post('reset-password')
+  @Post('otp/request')
+  @HttpCode(HttpStatus.OK)
+  async requestOtp(@Body() requestOtpDto: RequestOtpDto) {
+    await this.userService.requestOtp(requestOtpDto)
+
+    return this.responseUtil.response({
+      message: 'OTP requested successfully',
+      code: HttpStatus.OK,
+    })
+  }
+
+  @IsPublic()
+  @Post('otp')
+  @HttpCode(HttpStatus.OK)
+  async verifyOtp(
+    @Headers('x-device-id') deviceId: string,
+    @Body() verifyOtpDto: VerifyOtpDto
+  ) {
+    if (!deviceId) {
+      throw new BadRequestException('Device ID is required')
+    }
+
+    const isValid = await this.userService.verifyOtp(deviceId, verifyOtpDto)
+
+    if (!isValid) {
+      throw new BadRequestException('Invalid OTP')
+    }
+
+    return this.responseUtil.response({
+      message: 'OTP verified successfully',
+      code: HttpStatus.OK,
+    })
+  }
+  @IsPublic()
+  @Post('verify-email')
+  @HttpCode(HttpStatus.OK)
+  async verifyEmail(@Headers('x-verify-token') verifyToken: string) {
+    if (!verifyToken) {
+      throw new BadRequestException('Verify token is required')
+    }
+
+    const isValid = await this.userService.verifyEmailToken(verifyToken)
+
+    if (!isValid) {
+      throw new BadRequestException('Invalid verify token')
+    }
+
+    return this.responseUtil.response({
+      message: 'Email verified successfully',
+      code: HttpStatus.OK,
+    })
+  }
+  @IsPublic()
+  @Patch('reset-password')
+  @HttpCode(HttpStatus.OK)
   async resetPassword(
     @Req() req: Request,
     @Body() { password, confirmationPassword }: ResetPasswordDto
   ) {
     const token = req.headers['x-reset-token'] as string
     if (!token) {
-      throw new BadRequestException('Invalid or missing reset token')
+      throw new BadRequestException('Invalid or missing reset password')
     }
 
     if (password !== confirmationPassword) {
@@ -94,6 +153,7 @@ export class UserController {
     await this.userService.resetPassword(token, password)
     return this.responseUtil.response({
       message: 'Password successfully reset!',
+      code: HttpStatus.OK,
     })
   }
 }
