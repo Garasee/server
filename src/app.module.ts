@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module'
 import { CommonModule } from './commons/common.module'
 import { UserModule } from './user/user.module'
 import { AuthGuard } from './authentication/auth.guard'
+import { PredictionModule } from './prediction/prediction.module'
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthGuard } from './authentication/auth.guard'
     CommonModule,
     AuthenticationModule,
     UserModule,
+    PredictionModule,
   ],
   controllers: [AppController],
   providers: [

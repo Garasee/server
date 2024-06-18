@@ -40,7 +40,12 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException(`Invalid Token`)
       }
 
-      const userId = this.cipher.decryptToken(rawToken)
+      let userId: string
+      try {
+        userId = this.cipher.decryptToken(rawToken)
+      } catch (e) {
+        throw new UnauthorizedException(`Invalid Token`)
+      }
 
       const user = await this.prisma.user.findUnique({
         where: { id: userId },

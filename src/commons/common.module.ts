@@ -7,6 +7,5 @@ import { HttpModule } from '@nestjs/axios'
 @Module({
   providers: [ResponseUtil, CipherUtil],
   exports: [ResponseUtil, CipherUtil],
-  imports: [HttpModule],
 })
 export class CommonModule {}
