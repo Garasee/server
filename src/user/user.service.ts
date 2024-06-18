@@ -9,7 +9,6 @@ import { PrismaService } from '../prisma/prisma.service'
 
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
 import { randomBytes } from 'crypto'
-import { SessionType } from '@prisma/client'
 import { isAfter } from 'date-fns'
 import { compare, hash } from 'bcrypt'
 
@@ -72,7 +71,6 @@ export class UserService {
         token: resetToken,
         userId: user.id,
         expiredAt: resetTokenExpiry,
-        type: SessionType.PASSWORD_RESET,
       },
     })
   }
@@ -81,10 +79,6 @@ export class UserService {
     const resetSession = await this.prisma.session.findUnique({
       where: { token, isExpired: false },
     })
-
-    if (!resetSession || resetSession.type !== SessionType.PASSWORD_RESET) {
-      throw new NotFoundException('Invalid Session!')
-    }
 
     if (isAfter(new Date(), resetSession.expiredAt)) {
       throw new NotFoundException('Expired Session!')

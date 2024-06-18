@@ -16,43 +16,53 @@ model City {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  name        String
-  email       String       @unique
-  password    String
-  phone       String?
-  cityId      String
-  city        City         @relation(fields: [cityId], references: [id])
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  sessions    Session[]
-  evaluations Evaluation[]
+  id         String       @id @default(uuid())
+  name       String
+  email      String       @unique
+  password   String
+  phone      String?
+  cityId     String
+  city       City         @relation(fields: [cityId], references: [id])
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  pedictions Prediction[]
+  sessions   Session[]
+}
+
+enum InjectionType {
+  MULTIPOINT
+  DIRECT
+}
+
+model Prediction {
+  id             String        @id @default(uuid())
+  brand          String
+  isNew          Boolean
+  year           Int
+  engineCapacity Float
+  peakPower      Float
+  peakTorque     Float
+  injection      InjectionType
+  length         Float
+  width          Float
+  wheelBase      Float
+  doorAmount     Int
+  seatCapacity   Int
+  price          Decimal       @default(0.0)
+  isAccepatble   Float
+  user           User          @relation(fields: [userId], references: [id])
+  userId         String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Session {
-  id        String      @id @default(uuid())
-  token     String      @unique
-  user      User        @relation(fields: [userId], references: [id])
-  userId    String
-  expiredAt DateTime
-  isExpired Boolean     @default(false)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  type      SessionType @default(AUTHENTICATION)
-}
-
-model Evaluation {
   id        String   @id @default(uuid())
-  payload   Json     @default("{}")
-  price     Decimal  @default(0.0)
-  isGood    Boolean  @default(true)
+  token     String   @unique
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+  expiredAt DateTime
+  isExpired Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum SessionType {
-  AUTHENTICATION
-  PASSWORD_RESET
 }
