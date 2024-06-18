@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module'
 import { CommonModule } from './commons/common.module'
 import { UserModule } from './user/user.module'
 import { AuthGuard } from './authentication/auth.guard'
+import { CityModule } from './city/city.module'
 import { PredictionModule } from './prediction/prediction.module'
 
 @Module({
@@ -29,6 +30,7 @@ import { PredictionModule } from './prediction/prediction.module'
     AuthenticationModule,
     UserModule,
     PredictionModule,
+    CityModule,
   ],
   controllers: [AppController],
   providers: [
