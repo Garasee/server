@@ -1,7 +1,6 @@
 import { Global, Module } from '@nestjs/common'
 import { ResponseUtil } from './utilities/response.util'
 import { CipherUtil } from './utilities/cipher.util'
-import { HttpModule } from '@nestjs/axios'
 
 @Global()
 @Module({
